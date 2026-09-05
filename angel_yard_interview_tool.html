@@ -1,0 +1,440 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+<title>Angel Yard interview questions</title>
+<style>
+  :root {
+    --bg: #f7f6f3;
+    --card: #ffffff;
+    --border: #ddd8cf;
+    --text: #2a2a28;
+    --muted: #6b6a63;
+    --accent: #3a5a40;
+    --accent-dark: #2c452f;
+    --record: #a8442f;
+    --record-dark: #8a3626;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    padding: 16px;
+    background: var(--bg);
+    color: var(--text);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    font-size: 16px;
+    line-height: 1.4;
+    padding-bottom: 90px;
+  }
+  h1 {
+    font-size: 20px;
+    margin: 4px 0 2px;
+  }
+  .sub {
+    color: var(--muted);
+    font-size: 14px;
+    margin-bottom: 16px;
+  }
+  .name-field {
+    margin-bottom: 20px;
+  }
+  .name-field label {
+    display: block;
+    font-size: 13px;
+    color: var(--muted);
+    margin-bottom: 4px;
+  }
+  .name-field input {
+    width: 100%;
+    padding: 10px 12px;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    font-size: 16px;
+    background: var(--card);
+  }
+  .card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 16px;
+    margin-bottom: 14px;
+  }
+  .q-num {
+    font-size: 12px;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+  }
+  .q-text {
+    font-size: 18px;
+    font-weight: 600;
+    margin: 4px 0 12px;
+  }
+  textarea {
+    width: 100%;
+    min-height: 140px;
+    padding: 10px;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    font-size: 15px;
+    font-family: inherit;
+    resize: vertical;
+    background: #fdfdfc;
+  }
+  .hint {
+    font-size: 13px;
+    color: var(--muted);
+    margin-top: 8px;
+  }
+  .mic-row {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+    margin: 14px 0 4px;
+  }
+  .mic-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    border: none;
+    border-radius: 30px;
+    padding: 12px 24px;
+    font-size: 15px;
+    font-weight: 600;
+    color: #fff;
+    background: var(--accent);
+    cursor: pointer;
+    width: 100%;
+    max-width: 320px;
+  }
+  .mic-btn.recording { background: var(--record); }
+  .mic-status {
+    font-size: 13px;
+    color: var(--muted);
+    min-height: 16px;
+  }
+  .nav-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 14px;
+  }
+  .nav-btn {
+    background: #e9e5da;
+    color: var(--text);
+    border: none;
+    border-radius: 8px;
+    padding: 10px 16px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+  }
+  .nav-btn.primary {
+    background: var(--accent);
+    color: #fff;
+  }
+  .nav-btn:disabled {
+    opacity: 0.4;
+  }
+  .progress {
+    font-size: 13px;
+    color: var(--muted);
+  }
+  .footer-bar {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: var(--card);
+    border-top: 1px solid var(--border);
+    padding: 10px 16px;
+    display: flex;
+    gap: 10px;
+  }
+  .footer-bar button {
+    flex: 1;
+    padding: 12px;
+    border: none;
+    border-radius: 8px;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    background: #e9e5da;
+    color: var(--text);
+  }
+  .toast {
+    position: fixed;
+    bottom: 70px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: var(--text);
+    color: #fff;
+    padding: 8px 14px;
+    border-radius: 6px;
+    font-size: 13px;
+    opacity: 0;
+    transition: opacity 0.2s;
+    pointer-events: none;
+    max-width: 90%;
+    text-align: center;
+  }
+  .toast.show { opacity: 1; }
+  .submitted-banner {
+    background: #e4ede4;
+    border: 1px solid #b9d1b9;
+    color: #2c452f;
+    padding: 12px 14px;
+    border-radius: 8px;
+    margin-bottom: 14px;
+    font-size: 14px;
+  }
+</style>
+</head>
+<body>
+
+<h1>Angel Yard interview questions</h1>
+<div class="sub">One question at a time. Tap in the box and either use your phone keyboard's mic/dictation button, or the record button below if it appears, or type directly.</div>
+
+<div id="submittedBanner" class="submitted-banner" style="display:none;"></div>
+
+<div class="name-field">
+  <label for="intervieweeName">Interviewee name</label>
+  <input type="text" id="intervieweeName" placeholder="Name">
+</div>
+
+<div class="card">
+  <div class="q-num" id="qNum"></div>
+  <div class="q-text" id="qText"></div>
+  <textarea id="answerBox" placeholder="Tap here, then dictate or type your answer."></textarea>
+  <div class="hint">Keyboard dictation works on any phone: on iPhone tap the mic icon on the on-screen keyboard, on Android tap the mic icon on the keyboard toolbar.</div>
+
+  <div class="mic-row" id="micRow" style="display:none;">
+    <button class="mic-btn" id="micBtn">🎤 Record</button>
+    <div class="mic-status" id="micStatus"></div>
+  </div>
+
+  <div class="nav-row">
+    <button class="nav-btn" id="prevBtn">Back</button>
+    <span class="progress" id="progress"></span>
+    <button class="nav-btn primary" id="nextBtn">Next</button>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<div class="footer-bar">
+  <button id="copyBtn">Copy all answers</button>
+  <button id="downloadBtn">Download as text</button>
+</div>
+
+<script>
+/* ---- Configuration ----
+   Paste the Google Apps Script Web App URL here once it's deployed
+   (see the setup notes provided alongside this file). Leave blank
+   and the page will just prompt people to copy/download instead. */
+const ENDPOINT_URL = "https://script.google.com/macros/s/AKfycbwXZQdL9MeV8o8wfOQ0r-O25nv0kMY6AlPmPpNqWzIbj4cRybqGoWCkQDNFrKZQRPE/exec";
+
+const QUESTIONS = [
+  "What drew you to cohousing?",
+  "Tell me something about you that I couldn't find out any other way?",
+  "What's your working identity now or in the past?",
+  "How do you like to spend your free time?",
+  "Is there something you're currently learning, or want to learn?",
+  "Who/what else would be living with you or visiting you at Angel Yard?",
+  "What skills do you imagine contributing to the group?"
+];
+
+const answers = new Array(QUESTIONS.length).fill('');
+let current = 0;
+let submitted = false;
+
+const qNum = document.getElementById('qNum');
+const qText = document.getElementById('qText');
+const answerBox = document.getElementById('answerBox');
+const prevBtn = document.getElementById('prevBtn');
+const nextBtn = document.getElementById('nextBtn');
+const progress = document.getElementById('progress');
+const submittedBanner = document.getElementById('submittedBanner');
+
+function renderQuestion() {
+  stopRecording();
+  qNum.textContent = 'Question ' + (current + 1) + ' of ' + QUESTIONS.length;
+  qText.textContent = QUESTIONS[current];
+  answerBox.value = answers[current];
+  progress.textContent = (current + 1) + ' / ' + QUESTIONS.length;
+  prevBtn.disabled = current === 0;
+  nextBtn.textContent = current === QUESTIONS.length - 1 ? 'Submit' : 'Next';
+}
+
+answerBox.addEventListener('input', () => {
+  answers[current] = answerBox.value;
+});
+
+prevBtn.addEventListener('click', () => {
+  answers[current] = answerBox.value;
+  if (current > 0) {
+    current--;
+    renderQuestion();
+  }
+});
+
+nextBtn.addEventListener('click', () => {
+  answers[current] = answerBox.value;
+  if (current < QUESTIONS.length - 1) {
+    current++;
+    renderQuestion();
+  } else {
+    submitAnswers();
+  }
+});
+
+/* Optional native mic button — only shown if the browser supports it.
+   Keyboard dictation (see hint text) works regardless of this. */
+const SpeechRecognitionClass = window.SpeechRecognition || window.webkitSpeechRecognition;
+let recognition = null;
+let recognizing = false;
+let baseText = '';
+
+function stopRecording() {
+  if (recognizing && recognition) recognition.stop();
+}
+
+if (SpeechRecognitionClass) {
+  const micRow = document.getElementById('micRow');
+  const micBtn = document.getElementById('micBtn');
+  const micStatus = document.getElementById('micStatus');
+  micRow.style.display = 'flex';
+
+  micBtn.addEventListener('click', () => {
+    if (recognizing) {
+      recognition.stop();
+      return;
+    }
+    recognition = new SpeechRecognitionClass();
+    recognition.lang = 'en-GB';
+    recognition.continuous = true;
+    recognition.interimResults = true;
+
+    baseText = answerBox.value ? answerBox.value.trim() + ' ' : '';
+
+    recognition.onstart = () => {
+      recognizing = true;
+      micBtn.textContent = '⏹ Stop';
+      micBtn.classList.add('recording');
+      micStatus.textContent = 'Listening...';
+    };
+
+    recognition.onresult = (event) => {
+      let finalText = '';
+      let interimText = '';
+      for (let j = 0; j < event.results.length; j++) {
+        const transcript = event.results[j][0].transcript;
+        if (event.results[j].isFinal) {
+          finalText += transcript + ' ';
+        } else {
+          interimText += transcript;
+        }
+      }
+      answerBox.value = (baseText + finalText + interimText).trim();
+      answers[current] = answerBox.value;
+    };
+
+    recognition.onerror = (event) => {
+      micStatus.textContent = 'Error: ' + event.error;
+    };
+
+    recognition.onend = () => {
+      recognizing = false;
+      micBtn.textContent = '🎤 Record';
+      micBtn.classList.remove('recording');
+      micStatus.textContent = '';
+    };
+
+    recognition.start();
+  });
+}
+
+renderQuestion();
+
+function buildPayload() {
+  answers[current] = answerBox.value;
+  return {
+    name: document.getElementById('intervieweeName').value.trim() || 'Unnamed',
+    submittedAt: new Date().toISOString(),
+    answers: QUESTIONS.map((q, i) => ({ question: q, answer: answers[i].trim() }))
+  };
+}
+
+function buildTranscript() {
+  const payload = buildPayload();
+  let out = 'Angel Yard interview — ' + payload.name + '\n\n';
+  payload.answers.forEach((a, i) => {
+    out += (i + 1) + '. ' + a.question + '\n' + (a.answer || '(no answer recorded)') + '\n\n';
+  });
+  return out;
+}
+
+function showToast(msg) {
+  const toast = document.getElementById('toast');
+  toast.textContent = msg;
+  toast.classList.add('show');
+  setTimeout(() => toast.classList.remove('show'), 2200);
+}
+
+async function submitAnswers() {
+  const payload = buildPayload();
+
+  if (!ENDPOINT_URL || ENDPOINT_URL.indexOf('PASTE_YOUR') === 0) {
+    showToast('Submission isn\'t set up yet — use Copy or Download and send it directly.');
+    return;
+  }
+
+  try {
+    // Apps Script web apps don't return CORS headers readable by fetch,
+    // so this uses no-cors: the request is sent, but we can't confirm
+    // the response. Download/Copy remain available as a manual backup.
+    await fetch(ENDPOINT_URL, {
+      method: 'POST',
+      mode: 'no-cors',
+      headers: { 'Content-Type': 'text/plain' },
+      body: JSON.stringify(payload)
+    });
+    submitted = true;
+    submittedBanner.style.display = 'block';
+    submittedBanner.textContent = 'Answers sent. If you want a copy for yourself, use Download below.';
+    showToast('Sent');
+  } catch (err) {
+    showToast('Could not send — use Copy or Download and send it directly.');
+  }
+}
+
+document.getElementById('copyBtn').addEventListener('click', async () => {
+  const text = buildTranscript();
+  try {
+    await navigator.clipboard.writeText(text);
+    showToast('Copied');
+  } catch (e) {
+    showToast('Could not copy — select and copy manually');
+  }
+});
+
+document.getElementById('downloadBtn').addEventListener('click', () => {
+  const text = buildTranscript();
+  const name = (document.getElementById('intervieweeName').value.trim() || 'interview');
+  const blob = new Blob([text], { type: 'text/plain' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = 'angel-yard-' + name.replace(/\s+/g, '-').toLowerCase() + '.txt';
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+});
+</script>
+
+</body>
+</html>
